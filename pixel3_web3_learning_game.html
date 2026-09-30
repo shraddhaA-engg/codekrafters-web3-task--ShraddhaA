@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PIXEL3 // Web3 App</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:wght@400;700&display=swap');
+:root{
+ --bg:#07080d;--panel:#0e1018;--panel2:#141722;--pink:#ff4fa3;--cyan:#37f4e3;
+ --purple:#9a6cff;--yellow:#ffd84d;--green:#55ef91;--white:#f7f5ff;
+ --muted:#777c91;--line:#292d3d;--red:#ff5b6e;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#030409;color:var(--white);font-family:"Space Mono",monospace}
+button,a{font:inherit}
+button{cursor:pointer}
+body{display:flex;justify-content:center;padding:18px}
+.app{width:min(1450px,100%);min-height:calc(100vh - 36px);background:var(--bg);border:2px solid #252938;box-shadow:0 0 0 5px #0a0b11,0 25px 80px #000;display:grid;grid-template-columns:225px 1fr;overflow:hidden;position:relative}
+.pixel-grid{position:absolute;inset:0;pointer-events:none;opacity:.16;background-image:linear-gradient(#24283a 1px,transparent 1px),linear-gradient(90deg,#24283a 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(to bottom,#000,transparent 85%);z-index:0}
+.sidebar{background:#090a10;border-right:2px solid var(--line);padding:24px 16px;display:flex;flex-direction:column;position:relative;z-index:3}
+.logo{font-family:"Press Start 2P";font-size:15px;line-height:1.7;margin:5px 8px 35px;color:var(--white)}
+.logo b{color:var(--pink)}.logo em{color:var(--cyan);font-style:normal}
+.profile-mini{border:2px solid var(--line);padding:13px;margin-bottom:25px;background:var(--panel)}
+.avatar{width:38px;height:38px;background:var(--pink);color:#090a10;border:3px solid #fff;display:grid;place-items:center;font-family:"Press Start 2P";font-size:11px;margin-bottom:10px;box-shadow:4px 4px 0 var(--cyan)}
+.profile-mini strong{font-size:10px}.profile-mini small{color:var(--muted);font-size:7px}
+.nav{display:grid;gap:8px}.nav button{background:transparent;border:2px solid transparent;color:#8d92a7;text-align:left;padding:13px 11px;font-weight:700;font-size:9px;letter-spacing:.04em}.nav button:hover,.nav button.active{background:#151824;color:#fff;border-color:#363b50;box-shadow:4px 4px 0 #05060a}.nav button.active{color:var(--cyan)}
+.coin-box{margin-top:auto;border:2px solid #5e4f15;background:#17140a;padding:14px}.coin-box small{font-size:7px;color:#8f875f}.coins{font-family:"Press Start 2P";font-size:15px;color:var(--yellow);margin-top:8px}.sidebar-foot{font-size:7px;color:#4d5263;margin:15px 8px 0}
+.main{position:relative;z-index:1;min-width:0;overflow:auto}
+.topbar{height:72px;border-bottom:2px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 27px;background:#0a0b11eF;backdrop-filter:blur(8px);position:sticky;top:0;z-index:5}.crumb{font-size:9px;color:var(--muted)}.crumb b{color:var(--cyan)}.top-actions{display:flex;gap:9px;align-items:center}.top-icon{border:2px solid var(--line);background:var(--panel);color:#fff;width:38px;height:34px}.wallet-btn{border:2px solid var(--cyan);background:#0c2726;color:var(--cyan);padding:9px 12px;font-size:8px;font-weight:700}
+.screen{display:none;padding:34px 34px 70px;max-width:1200px;margin:auto}.screen.active{display:block}
+.hero{min-height:470px;display:grid;grid-template-columns:1fr .9fr;gap:40px;align-items:center}.eyebrow{color:var(--pink);font-size:8px;letter-spacing:.18em;font-weight:700;margin-bottom:15px}.hero h1{font-family:"Press Start 2P";font-size:clamp(34px,5vw,65px);line-height:1.35;margin:0 0 18px;text-shadow:5px 5px 0 #24142c}.hero h1 span{color:var(--cyan)}.hero h1 i{font-style:normal;color:var(--pink)}.hero p{color:#979bad;line-height:1.9;font-size:11px;max-width:580px}.buttons{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}.pixel-btn{border:2px solid #fff;background:var(--pink);color:#08090d;padding:13px 16px;font-size:8px;font-weight:700;box-shadow:5px 5px 0 #71264d}.pixel-btn.secondary{background:var(--panel);color:var(--cyan);border-color:var(--cyan);box-shadow:5px 5px 0 #123e3a}.pixel-btn:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 #71264d}
+.pixel-scene{height:410px;display:grid;place-items:center;position:relative}.planet{width:220px;height:220px;background:#111622;border:7px solid var(--cyan);box-shadow:0 0 0 9px #0c2021,0 0 45px #37f4e355;position:relative;image-rendering:pixelated}.planet:before{content:"";position:absolute;left:35px;top:48px;width:35px;height:35px;background:var(--pink);box-shadow:75px 25px 0 var(--purple),20px 75px 0 var(--cyan),105px 90px 0 var(--yellow),50px 120px 0 var(--pink)}.planet:after{content:"WEB3";position:absolute;left:38px;bottom:32px;font-family:"Press Start 2P";font-size:15px;color:#fff;text-shadow:3px 3px 0 #000}.orbit{position:absolute;width:360px;height:115px;border:3px dashed var(--pink);transform:rotate(-22deg);animation:spin 9s linear infinite}.orbit.two{width:180px;height:340px;border-color:var(--purple);transform:rotate(33deg)}.float{position:absolute;border:2px solid #fff;background:var(--panel);padding:9px;color:var(--cyan);font-family:"Press Start 2P";font-size:8px;box-shadow:4px 4px 0 var(--pink);animation:bob 2.5s infinite}.f1{top:30px;right:15px}.f2{bottom:30px;left:20px;color:var(--yellow);animation-delay:.8s}.f3{top:120px;left:0;color:var(--pink);animation-delay:1.3s}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0 45px}.stat{background:var(--panel);border:2px solid var(--line);padding:17px}.stat b{display:block;color:var(--cyan);font-family:"Press Start 2P";font-size:13px;margin-bottom:9px}.stat span{font-size:7px;color:var(--muted)}
+.title-row{display:flex;justify-content:space-between;align-items:end;margin:25px 0}.title-row h2{font-family:"Press Start 2P";font-size:18px;line-height:1.7;margin:0}.title-row p{font-size:8px;color:var(--muted)}
+.toolkit{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.tool{background:var(--panel);border:2px solid var(--line);padding:18px;text-align:left;min-height:205px;color:#fff;position:relative;transition:.15s}.tool:hover{transform:translate(-3px,-3px);border-color:#656b83;box-shadow:6px 6px 0 #000}.tool .icon{width:55px;height:55px;border:2px solid var(--cyan);background:#0c171a;color:var(--cyan);display:grid;place-items:center;font-family:"Press Start 2P";font-size:17px;margin-bottom:20px}.tool:nth-child(2) .icon{color:var(--pink);border-color:var(--pink);background:#1b0d17}.tool:nth-child(3) .icon{color:var(--purple);border-color:var(--purple);background:#130f20}.tool:nth-child(4) .icon{color:var(--yellow);border-color:var(--yellow);background:#1c1809}.tool:nth-child(5) .icon{color:var(--green);border-color:var(--green);background:#0b1a12}.tool:nth-child(6) .icon{color:#6ca9ff;border-color:#6ca9ff;background:#0b1420}.tool small{color:#5c6174;font-size:7px}.tool h3{font-family:"Press Start 2P";font-size:9px;line-height:1.7;margin:8px 0}.tool p{font-size:8px;line-height:1.8;color:#858a9d;margin:0}.tool .open-label{position:absolute;bottom:15px;right:16px;color:var(--cyan);font-size:7px}
+.quest-list{display:grid;gap:12px}.quest{background:var(--panel);border:2px solid var(--line);display:grid;grid-template-columns:55px 1fr auto;align-items:center;gap:15px;padding:15px}.qicon{width:45px;height:45px;border:2px solid var(--pink);display:grid;place-items:center;color:var(--pink);font-family:"Press Start 2P"}.quest h3{font-size:10px;margin:0 0 7px}.quest p{font-size:8px;color:var(--muted);margin:0}.reward{border:2px solid #64551c;background:#1b170a;color:var(--yellow);padding:9px;font-size:8px;font-weight:700}.reward.done{color:var(--green);border-color:var(--green);background:#0d1b13}
+.explore-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.feature{background:var(--panel);border:2px solid var(--line);padding:25px;min-height:240px}.feature h3{font-family:"Press Start 2P";font-size:12px;line-height:1.8}.feature p{color:var(--muted);font-size:9px;line-height:1.9}.bar{height:8px;background:#202432;margin:18px 0}.bar i{display:block;height:100%;width:62%;background:var(--pink)}.mini-tags{display:flex;gap:7px;flex-wrap:wrap}.tag{font-size:7px;border:1px solid #3a3f52;padding:7px;color:#aaaec0}
+.wallet-screen{max-width:900px}.wallet-hero{border:2px solid var(--cyan);background:linear-gradient(120deg,#0b1818,#11131c);padding:35px;box-shadow:8px 8px 0 #102c2c}.wallet-hero h2{font-family:"Press Start 2P";font-size:20px;line-height:1.7}.wallet-hero p{font-size:9px;color:var(--muted);line-height:1.9}.address{border:2px dashed #394052;padding:12px;font-size:8px;color:#6d7387;margin:20px 0;background:#090b10}.wallet-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}.balance{background:var(--panel);border:2px solid var(--line);padding:20px}.balance small{font-size:7px;color:var(--muted)}.balance strong{display:block;font-family:"Press Start 2P";font-size:14px;color:var(--yellow);margin-top:10px}
+.profile-card{display:grid;grid-template-columns:100px 1fr;gap:25px;background:var(--panel);border:2px solid var(--line);padding:25px}.big-avatar{width:85px;height:85px;background:var(--pink);border:4px solid #fff;display:grid;place-items:center;color:#08090d;font-family:"Press Start 2P";font-size:17px;box-shadow:7px 7px 0 var(--cyan)}.profile-card h2{font-family:"Press Start 2P";font-size:16px}.profile-card p{font-size:9px;color:var(--muted);line-height:1.8}
+.modal{position:fixed;inset:0;background:#000c;z-index:100;display:none;place-items:center;padding:20px}.modal.show{display:grid}.modal-box{width:min(590px,100%);background:#0e1018;border:3px solid var(--cyan);padding:28px;box-shadow:9px 9px 0 var(--pink);position:relative}.close{position:absolute;right:12px;top:8px;border:0;background:none;color:#fff;font-size:26px}.modal-box .big-icon{width:65px;height:65px;border:2px solid var(--pink);display:grid;place-items:center;color:var(--pink);font-family:"Press Start 2P";font-size:19px;margin-bottom:20px}.modal-box h2{font-family:"Press Start 2P";font-size:15px;line-height:1.8}.modal-box p,.fact{font-size:9px;color:#969bad;line-height:2}.fact{border:2px dashed #34394b;padding:13px;margin:18px 0;color:#c4c7d3}
+.toast{position:fixed;right:25px;bottom:25px;background:#f7f5ff;color:#08090d;border:3px solid var(--pink);padding:13px 17px;font-size:8px;font-weight:700;z-index:110;transform:translateY(100px);transition:.25s}.toast.show{transform:translateY(0)}
+.mobile-nav{display:none}
+@keyframes spin{to{transform:rotate(338deg)}}@keyframes bob{50%{transform:translateY(-8px)}}@keyframes float{50%{transform:translateY(-7px)}}
+@media(max-width:900px){body{padding:0}.app{width:100%;min-height:100vh;border:0;box-shadow:none;grid-template-columns:1fr}.sidebar{display:none}.topbar{height:62px}.screen{padding:24px 18px 90px}.hero{grid-template-columns:1fr}.hero-art{order:-1;height:330px}.stats{grid-template-columns:repeat(2,1fr)}.toolkit{grid-template-columns:repeat(2,1fr)}.mobile-nav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;bottom:0;left:0;right:0;background:#090a10;border-top:2px solid var(--line);z-index:50}.mobile-nav button{background:none;border:0;color:#70758a;padding:10px 2px;font-size:7px}.mobile-nav button.active{color:var(--cyan)}}
+@media(max-width:560px){.hero h1{font-size:34px}.hero-art{transform:scale(.78);margin:-35px 0}.toolkit,.explore-grid,.wallet-grid{grid-template-columns:1fr}.stats{gap:7px}.stat{padding:12px}.stat b{font-size:10px}.top-actions .top-icon{display:none}.quest{grid-template-columns:45px 1fr}.reward{grid-column:2;width:max-content}.profile-card{grid-template-columns:1fr}.topbar{padding:0 14px}}
+
+.profile-mini strong{font-size:13px}.profile-mini small,.sidebar-foot,.coin-box small{font-size:10px}
+.nav button{font-size:12px}.crumb{font-size:12px}.wallet-btn{font-size:11px}.eyebrow{font-size:11px}
+.hero p{font-size:14px}.pixel-btn{font-size:11px}.float{font-size:10px}.stat span{font-size:10px}
+.title-row p{font-size:11px}.tool small,.tool .open-label{font-size:10px}.tool h3{font-size:11px}.tool p{font-size:11px}
+.quest h3{font-size:13px}.quest p,.reward{font-size:11px}.feature p{font-size:12px}.tag{font-size:10px}
+.wallet-hero p,.profile-card p,.modal-box p,.fact{font-size:12px}.address{font-size:11px}.balance small{font-size:10px}
+.task-box{border:2px solid #3c334e;background:#12101b;padding:14px;margin:18px 0;color:#e5dff5}
+.task-box strong{display:block;color:var(--yellow);font-size:12px;margin-bottom:8px}
+.task-box p{margin:0 0 12px;font-size:12px;line-height:1.8}.task-status{font-size:11px;color:var(--green);margin-top:8px;min-height:18px}
+.task-btn{border:2px solid var(--yellow);background:#211b0b;color:var(--yellow);padding:9px 12px;font:700 11px "Space Mono",monospace}
+.profile-form{display:grid;gap:12px;margin-top:22px}.profile-form label{display:grid;gap:6px;color:var(--cyan);font-size:12px}.profile-form input,.profile-form textarea{width:100%;padding:11px;background:#090b10;border:2px solid var(--line);color:#fff;font:12px "Space Mono",monospace}.profile-form textarea{min-height:75px;resize:vertical}.wallet-note{border:1px dashed #64551c;color:#c8bd8a;padding:12px;margin-top:14px;font-size:11px;line-height:1.7}.wallet-actions{display:flex;gap:12px;flex-wrap:wrap}
+.task-chip{display:inline-block;margin-top:8px;color:var(--yellow);font-size:10px;border:1px solid #64551c;padding:5px 7px}
+@media(max-width:900px){.mobile-nav{grid-template-columns:repeat(7,1fr)}.mobile-nav button{font-size:10px;padding:10px 1px}}
+
+
+.map-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.map-node{min-height:145px;text-align:left;background:#10131d;border:2px solid var(--line);color:#fff;padding:16px;cursor:pointer}.map-node.done{border-color:var(--green);box-shadow:4px 4px 0 #10251a}.map-node b{display:block;color:var(--cyan);margin:8px 0}.sim-form{display:flex;gap:10px;flex-wrap:wrap}.sim-form input{flex:1;min-width:180px;background:#090b10;border:2px solid var(--line);color:white;padding:12px;font:12px "Space Mono",monospace}.chain-list{display:grid;gap:10px;margin-top:18px}.block-card{background:#10131d;border:2px solid var(--purple);padding:14px;overflow-wrap:anywhere}.block-card small{color:var(--cyan)}.badge-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.badge{padding:14px;text-align:center;background:#11131b;border:2px solid var(--line);color:#777c91}.badge.earned{border-color:var(--yellow);color:var(--yellow);box-shadow:3px 3px 0 #30270d}.daily-card{border:2px solid var(--pink);background:#17101a;padding:18px;margin:15px 0}.level-line{color:var(--yellow);font-weight:bold}@media(max-width:700px){.map-grid,.badge-grid{grid-template-columns:1fr 1fr}}
+
+</style>
+</head>
+<body>
+<div class="app">
+<div class="pixel-grid"></div>
+
+<aside class="sidebar">
+  <div class="logo">PIXEL<em>//</em><b>3</b></div>
+  <div class="profile-mini"><div class="avatar">P3</div><strong>WEB3 EXPLORER</strong><br><small id="sidebarLevel">LEVEL 1 · 0 XP</small></div>
+  <div class="nav">
+    <button class="active" data-screen="home">▣ &nbsp; HOME</button>
+    <button data-screen="learn">◈ &nbsp; LEARN</button>
+    <button data-screen="quests">★ &nbsp; QUESTS</button>
+    <button data-screen="explore">◆ &nbsp; EXPLORE</button>
+    <button data-screen="map">🗺 &nbsp; LEARNING MAP</button>
+    <button data-screen="build">🧱 &nbsp; BUILD CHAIN</button>
+    <button data-screen="wallet">◇ &nbsp; WALLET</button>
+    <button data-screen="profile">◎ &nbsp; PROFILE</button>
+  </div>
+  <div class="coin-box"><small>PIXEL COINS</small><div class="coins">◈ <span id="coins">120</span></div></div>
+  <div class="sidebar-foot">WEB3 LEARNING APP<br>BUILD · EXPLORE · OWN</div>
+</aside>
+
+<main class="main">
+<header class="topbar">
+  <div class="crumb">PIXEL3 <b>//</b> <span id="crumb">HOME</span></div>
+  <div class="top-actions"><button class="top-icon" onclick="toast('Notifications are clear ✓')">♢</button><button class="wallet-btn" onclick="showScreen('wallet')">CONNECT WALLET</button></div>
+</header>
+
+<section class="screen active" id="screen-home">
+  <div class="hero">
+    <div>
+      <div class="eyebrow">01 // ENTER THE PIXELVERSE</div>
+      <h1>WELCOME TO<br><span>WEB</span><i>3</i></h1>
+      <p>Learn the internet of tomorrow through an interactive pixel world. Discover blockchain, smart contracts, NFTs, DAOs and more.</p>
+      <div class="buttons"><button class="pixel-btn" onclick="showScreen('learn')">START EXPLORING →</button><button class="pixel-btn secondary" onclick="randomModule()">SURPRISE ME ✦</button></div>
+    </div>
+    <div class="pixel-scene"><div class="orbit"></div><div class="orbit two"></div><div class="planet"></div><div class="float f1">WEB3</div><div class="float f2">◈ +10</div><div class="float f3">ON-CHAIN</div></div>
+  </div>
+  <div class="stats"><div class="stat"><b>06</b><span>CORE TOPICS</span></div><div class="stat"><b id="completedCount">00</b><span>MODULES DONE</span></div><div class="stat"><b id="coinStat">120</b><span>PIXEL COINS</span></div><div class="stat"><b>03</b><span>ACTIVE QUESTS</span></div></div>
+  <div class="title-row"><div><h2>YOUR WEB3 TOOLKIT</h2></div><p>Tap a card to open it.</p></div>
+  <div class="toolkit" id="homeTools"></div>
+</section>
+
+<section class="screen" id="screen-learn">
+  <div class="title-row"><h2>LEARN WEB3</h2><p>ONE MODULE AT A TIME</p></div>
+  <div class="toolkit" id="learnTools"></div>
+</section>
+
+<section class="screen" id="screen-quests">
+  <div class="title-row"><h2>QUEST BOARD</h2><p>EARN PIXEL COINS + XP</p></div><div class="daily-card"><div class="eyebrow">🔥 DAILY QUEST // FACT SCOUT</div><h3>Read a Fact Drop today</h3><p id="dailyText">Open any toolkit module and read its Fact Drop to unlock today’s reward.</p><button class="pixel-btn" id="dailyClaim" onclick="claimDaily()">CLAIM DAILY REWARD</button><p class="level-line" id="streakText"></p></div><div class="quest-list" id="questList"></div>
+</section>
+
+<section class="screen" id="screen-explore">
+  <div class="title-row"><h2>EXPLORE</h2><p>YOUR PROGRESS</p></div>
+  <div class="explore-grid">
+    <div class="feature"><div class="eyebrow">LEVEL</div><h3>PIXEL EXPLORER</h3><p>Complete modules and quests to unlock your next rank.</p><div class="bar"><i id="progressBar"></i></div><p id="progressText">260 / 400 XP</p></div>
+    <div class="feature"><div class="eyebrow">TOPICS</div><h3>YOUR COLLECTION</h3><p>Explore the building blocks of the decentralized web.</p><div class="mini-tags"><span class="tag">BLOCKCHAIN</span><span class="tag">NFT</span><span class="tag">DAO</span><span class="tag">WALLET</span><span class="tag">SMART CONTRACT</span></div></div>
+  </div>
+</section>
+<section class="screen" id="screen-map"><div class="title-row"><h2>LEARNING MAP</h2><p>CHOOSE YOUR NEXT NODE</p></div><p>Follow the path through Web3. Select any node to open its toolkit mission and Fact Drop.</p><div class="map-grid" id="mapGrid"></div></section>
+<section class="screen" id="screen-build"><div class="title-row"><h2>BUILD-A-BLOCKCHAIN</h2><p>LEARNING SIMULATOR</p></div><div class="feature"><p>Add sample data to append a block to this local demo chain. The hash is a teaching illustration, not cryptographic or network verified.</p><form class="sim-form" id="blockForm"><input id="blockData" maxlength="120" placeholder="Enter a sample transaction or note"><button class="pixel-btn" type="submit">MINE DEMO BLOCK</button></form></div><div class="chain-list" id="chainList"></div></section>
+
+<section class="screen wallet-screen" id="screen-wallet">
+  <div class="title-row"><h2>WALLET</h2><p>OPTIONAL WEB3 BONUS</p></div>
+  <div class="wallet-hero"><div class="eyebrow">BASIC WALLET INTERACTION</div><h2>CONNECT YOUR WALLET</h2><p>Connect a compatible browser wallet to demonstrate basic Web3 interaction. This app does not request or send transactions.</p><div class="address" id="address">WALLET NOT CONNECTED</div><div class="wallet-actions"><button class="pixel-btn" onclick="connectWallet()">CONNECT EXISTING WALLET</button><button class="pixel-btn secondary" onclick="createDemoWallet()">CREATE DEMO WALLET</button></div><div class="wallet-note">Demo wallet creates a sample address for this learning game only. It does not create keys or hold cryptocurrency. Use a wallet provider to create a real wallet.</div></div>
+  <div class="wallet-grid"><div class="balance"><small>PIXEL COINS</small><strong>◈ <span id="walletCoins">120</span></strong></div><div class="balance"><small>NETWORK</small><strong style="color:var(--cyan);font-size:10px">DEMO</strong></div><div class="balance"><small>STATUS</small><strong style="color:var(--green);font-size:10px">SAFE MODE</strong></div></div>
+</section>
+
+<section class="screen" id="screen-profile">
+  <div class="title-row"><h2>PROFILE</h2><p>YOUR PIXEL ID</p></div>
+  <div class="feature"><div class="eyebrow">🏆 BADGE COLLECTION</div><div class="badge-grid" id="badgeGrid"></div></div><div class="profile-card"><div class="big-avatar" id="profileAvatar">P3</div><div><div class="eyebrow">YOUR PIXEL ID</div><h2 id="profileNameDisplay">PIXEL EXPLORER</h2><p id="profileBioDisplay">Learning Web3 one pixel at a time.</p><p>Modules completed: <b id="profileDone">0</b> / 6<br>Pixel coins: <b id="profileCoins">120</b><br><span class="level-line" id="profileLevel">LEVEL 1 · 0 XP</span></p><form class="profile-form" id="profileForm"><label>Display name<input id="profileName" maxlength="32" placeholder="Your name"></label><label>Avatar initials<input id="profileInitials" maxlength="3" placeholder="P3"></label><label>About you<textarea id="profileBio" maxlength="120" placeholder="What are you learning?"></textarea></label><button class="pixel-btn" type="submit">SAVE PROFILE</button></form></div></div>
+</section>
+</main>
+
+<nav class="mobile-nav">
+<button class="active" data-screen="home">HOME</button><button data-screen="learn">LEARN</button><button data-screen="quests">QUESTS</button><button data-screen="wallet">WALLET</button><button data-screen="profile">PROFILE</button><button data-screen="map">MAP</button><button data-screen="build">BUILD</button>
+</nav>
+</div>
+
+<div class="modal" id="modal">
+<div class="modal-box">
+<button class="close" onclick="closeModal()">×</button>
+<div class="big-icon" id="modalIcon">▦</div>
+<div class="eyebrow">WEB3 MODULE</div>
+<h2 id="modalTitle">BLOCKCHAIN</h2>
+<p id="modalText"></p>
+<div class="fact" id="modalFact"></div><div class="task-box"><strong>PIXEL CHALLENGE // +15 COINS</strong><p id="modalTask"></p><button class="task-btn" id="taskBtn">COMPLETE CHALLENGE</button><div class="task-status" id="taskStatus"></div></div>
+<button class="pixel-btn" id="completeBtn">COMPLETE MODULE · +10 ◈</button>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const modules=[
+{id:"blockchain",icon:"▦",title:"BLOCKCHAIN",text:"A blockchain is a shared digital ledger. Records are grouped into blocks and linked across a network.",fact:"PIXEL FACT: Think of it as a shared notebook where network participants can verify updates.",task:"Name one thing a blockchain record can help verify."},
+{id:"smart",icon:"{}",title:"SMART CONTRACTS",text:"Smart contracts are programs deployed on blockchains that execute according to rules written in their code.",fact:"PIXEL FACT: In Web3, 'smart contract' usually means executable blockchain code, not necessarily a legal contract.",task:"Describe one rule a smart contract could automate."},
+{id:"wallet",icon:"◇",title:"WALLETS",text:"A Web3 wallet manages cryptographic keys and lets a user interact with compatible blockchain applications.",fact:"PIXEL FACT: Connecting a wallet and approving a transaction are separate actions.",task:"Name one wallet action and one thing you should never share: your recovery phrase."},
+{id:"nft",icon:"◆",title:"NFTs",text:"NFT means non-fungible token: a blockchain token designed to be individually distinguishable.",fact:"PIXEL FACT: NFTs can represent collectibles, memberships, tickets and other digital claims.",task:"Give one useful NFT example besides a collectible."},
+{id:"dao",icon:"◎",title:"DAOs",text:"A DAO is a community coordination model that can use blockchain infrastructure and governance mechanisms.",fact:"PIXEL FACT: Different DAOs can use very different membership and voting systems.",task:"Suggest one decision a DAO community could make together."},
+{id:"decentralized",icon:"✣",title:"DECENTRALIZATION",text:"Decentralization can distribute control, verification or data across participants rather than one central authority.",fact:"PIXEL FACT: Decentralization is a spectrum, not a simple yes-or-no property.",task:"Name one online service function that could be distributed among participants."}
+];
+let coins=Number(localStorage.getItem("p3coins")||120);
+let done=JSON.parse(localStorage.getItem("p3done")||"[]");
+let questDone=JSON.parse(localStorage.getItem("p3quests")||"[]");
+let taskDone=JSON.parse(localStorage.getItem("p3tasks")||"[]");
+let profile=JSON.parse(localStorage.getItem("p3profile")||'{"name":"PIXEL EXPLORER","initials":"P3","bio":"Learning Web3 one pixel at a time."}');
+let demoAddress=localStorage.getItem("p3demoAddress")||"";
+let xp=Number(localStorage.getItem("p3xp")||0);
+let factsSeen=JSON.parse(localStorage.getItem("p3facts")||"[]");
+let seenModules=JSON.parse(localStorage.getItem("p3seenModules")||"[]");
+let lastDaily=localStorage.getItem("p3daily")||"";
+let streak=Number(localStorage.getItem("p3streak")||0);
+let chain=JSON.parse(localStorage.getItem("p3chain")||"null")||[{data:"PIXEL3 GENESIS BLOCK",hash:"0000GENESIS",prev:"—"}];
+
+function $(x){return document.querySelector(x)}
+function save(){localStorage.setItem("p3coins",coins);localStorage.setItem("p3done",JSON.stringify(done));localStorage.setItem("p3quests",JSON.stringify(questDone));localStorage.setItem("p3tasks",JSON.stringify(taskDone));localStorage.setItem("p3xp",xp);localStorage.setItem("p3facts",JSON.stringify(factsSeen));localStorage.setItem("p3seenModules",JSON.stringify(seenModules));localStorage.setItem("p3chain",JSON.stringify(chain));render()}
+function render(){
+ document.querySelectorAll("#coins,#coinStat,#walletCoins,#profileCoins").forEach(e=>e.textContent=coins);
+ $("#completedCount").textContent=String(done.length).padStart(2,"0");$("#profileDone").textContent=done.length;
+ $("#profileNameDisplay").textContent=profile.name;$("#profileAvatar").textContent=profile.initials||"P3";$("#profileBioDisplay").textContent=profile.bio||"Learning Web3 one pixel at a time.";$("#profileName").value=profile.name;$("#profileInitials").value=profile.initials;$("#profileBio").value=profile.bio;
+ if(demoAddress && $("#address").textContent==="WALLET NOT CONNECTED") $("#address").textContent=demoAddress+" (DEMO)";
+ const level=Math.floor(xp/100)+1,within=xp%100;
+ $("#profileLevel").textContent="LEVEL "+level+" · "+xp+" XP";$("#sidebarLevel").textContent="LEVEL "+level+" · "+xp+" XP";
+ $("#progressBar").style.width=within+"%";$("#progressText").textContent="LEVEL "+level+" · "+within+" / 100 XP";
+ $("#streakText").textContent="🔥 CURRENT STREAK: "+streak+" DAY"+(streak===1?"":"S");
+ $("#dailyClaim").disabled=lastDaily===todayKey();
+ $("#dailyClaim").textContent=lastDaily===todayKey()?"DAILY REWARD CLAIMED":"CLAIM DAILY REWARD";
+ $("#dailyClaim").style.opacity=lastDaily===todayKey()?".55":"1";
+ $("#mapGrid").innerHTML=modules.map((m,i)=>'<button class="map-node" data-module="'+m.id+'"><small>NODE '+String(i+1).padStart(2,"0")+'</small><b>'+m.title+'</b><span>'+(done.includes(m.id)?"✓ CLEARED":"OPEN MISSION")+'</span></button>').join("");document.querySelectorAll("#mapGrid [data-module]").forEach(b=>b.onclick=()=>openModule(b.dataset.module));
+ renderBadges();renderChain();
+}
+function card(m){return `<button class="tool" onclick="openModule('${m.id}')"><div class="icon">${m.icon}</div><small>MODULE ${String(modules.indexOf(m)+1).padStart(2,"0")}</small><h3>${m.title}</h3><p>${m.text}</p><span class="task-chip">CHALLENGE +15 COINS</span><span class="open-label">OPEN →</span></button>`}
+function todayKey(){return new Date().toISOString().slice(0,10)}
+function renderBadges(){
+ const defs=[["🧭","FIRST STEPS",done.length>=1],["📚","TOPIC MASTER",done.length>=6],["⚡","MISSION CLEAR",taskDone.length>=1],["🔥","THREE DAY STREAK",streak>=3],["🧱","CHAIN BUILDER",chain.length>=2],["🗺","MAP MAKER",seenModules.length>=3]];
+ $("#badgeGrid").innerHTML=defs.map(b=>'<div class="badge '+(b[2]?"earned":"")+'"><div style="font-size:24px">'+b[0]+'</div><b>'+b[1]+'</b><br><small>'+(b[2]?"UNLOCKED":"LOCKED")+'</small></div>').join("");
+}
+function renderChain(){if($("#chainList"))$("#chainList").innerHTML=chain.slice().reverse().map((b,i)=>'<div class="block-card"><small>BLOCK '+(chain.length-1-i)+' · HASH '+b.hash+'</small><p>'+b.data+'</p><small>PREVIOUS: '+b.prev+'</small></div>').join("")}
+function simpleHash(t){let h=2166136261;for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0).toString(16).padStart(8,"0")}
+$("#blockForm").addEventListener("submit",e=>{e.preventDefault();const data=$("#blockData").value.trim();if(!data){toast("Add sample data first");return}const prev=chain[chain.length-1].hash;const hash=simpleHash(data+prev+Date.now());chain.push({data,prev,hash});xp+=20;$("#blockData").value="";save();toast("DEMO BLOCK ADDED · +20 XP")});
+function build(){
+ $("#homeTools").innerHTML=modules.map(card).join("");$("#learnTools").innerHTML=modules.map(card).join("");
+ const qs=[["Find The Block","Open the Blockchain module.",25],["Smart Thinker","Explore Smart Contracts.",30],["Pixel Collector","Complete any three modules.",40],["Wallet Bonus","Connect a compatible browser wallet.",25]];
+ $("#questList").innerHTML=qs.map((q,i)=>`<div class="quest"><div class="qicon">${i+1}</div><div><h3>${q[0]}</h3><p>${q[1]}</p></div><button class="reward ${questDone.includes(i)?"done":""}" onclick="claimQuest(${i},${q[2]})">${questDone.includes(i)?"✓ DONE":"+ "+q[2]+" ◈"}</button></div>`).join("");
+ render();
+}
+function showScreen(name){
+ document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+ $("#screen-"+name).classList.add("active");
+ document.querySelectorAll(".nav button,.mobile-nav button").forEach(b=>b.classList.toggle("active",b.dataset.screen===name));
+ $("#crumb").textContent=name.toUpperCase();
+ document.querySelector(".main").scrollTop=0;
+}
+document.querySelectorAll("[data-screen]").forEach(b=>b.onclick=()=>showScreen(b.dataset.screen));
+function openModule(id){
+ const m=modules.find(x=>x.id===id);$("#modalIcon").textContent=m.icon;$("#modalTitle").textContent=m.title;$("#modalText").textContent=m.text;$("#modalFact").textContent="⚡ FACT DROP // "+m.fact.replace("PIXEL FACT: ","");if(!factsSeen.includes(todayKey()))factsSeen.push(todayKey());if(!seenModules.includes(id))seenModules.push(id);localStorage.setItem("p3facts",JSON.stringify(factsSeen));localStorage.setItem("p3seenModules",JSON.stringify(seenModules));
+ $("#completeBtn").textContent=done.includes(id)?"MODULE COMPLETED ✓":"COMPLETE MODULE · +10 ◈";
+ $("#completeBtn").onclick=()=>{if(!done.includes(id)){done.push(id);coins+=10;xp+=100;save();toast("+100 XP · LEVEL UP PROGRESS")}else toast("Module already completed ✓");closeModal()};
+ $("#modalTask").textContent=m.task;
+ $("#taskStatus").textContent=taskDone.includes(id)?"CHALLENGE CLEARED — REWARD CLAIMED":"";
+ $("#taskBtn").disabled=taskDone.includes(id);
+ $("#taskBtn").onclick=()=>{if(!taskDone.includes(id)){taskDone.push(id);coins+=15;xp+=50;save();$("#taskStatus").textContent="CHALLENGE CLEARED — +15 COINS";$("#taskBtn").disabled=true;toast("+15 PIXEL COINS — CHALLENGE COMPLETE")}};
+ $("#modal").classList.add("show");
+}
+function closeModal(){$("#modal").classList.remove("show")}
+function claimQuest(i,reward){if(questDone.includes(i)){toast("Quest already completed ✓");return}questDone.push(i);coins+=reward;xp+=40;save();build();toast("QUEST COMPLETE · +"+reward+" COINS · +40 XP")}
+function claimDaily(){if(lastDaily===todayKey()){toast("Daily reward already claimed");return}if(!factsSeen.includes(todayKey())){toast("Open a module and read its Fact Drop first");return}const yesterday=new Date(Date.now()-86400000).toISOString().slice(0,10);streak=lastDaily===yesterday?streak+1:1;lastDaily=todayKey();localStorage.setItem("p3daily",lastDaily);localStorage.setItem("p3streak",streak);coins+=20;xp+=50;save();toast("DAILY QUEST COMPLETE · +50 XP · +20 COINS")}
+function randomModule(){openModule(modules[Math.floor(Math.random()*modules.length)].id)}
+function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("show");clearTimeout(window.tt);window.tt=setTimeout(()=>e.classList.remove("show"),2200)}
+function createDemoWallet(){if(!demoAddress){const bytes=new Uint8Array(20);crypto.getRandomValues(bytes);demoAddress="0x"+Array.from(bytes,b=>b.toString(16).padStart(2,"0")).join("");localStorage.setItem("p3demoAddress",demoAddress)}$("#address").textContent=demoAddress+" (DEMO)";toast("DEMO ADDRESS CREATED — NO REAL FUNDS");}
+$("#profileForm").addEventListener("submit",e=>{e.preventDefault();profile={name:$("#profileName").value.trim()||"PIXEL EXPLORER",initials:$("#profileInitials").value.trim().slice(0,3).toUpperCase()||"P3",bio:$("#profileBio").value.trim()||"Learning Web3 one pixel at a time."};localStorage.setItem("p3profile",JSON.stringify(profile));render();toast("PROFILE SAVED")});
+async function connectWallet(){
+ if(!window.ethereum){toast("No browser wallet detected — demo mode remains active.");return}
+ try{const a=await window.ethereum.request({method:"eth_requestAccounts"});$("#address").textContent=a[0].slice(0,10)+"..."+a[0].slice(-8);coins+=25;save();toast("WALLET CONNECTED · +25 ◈")}catch{toast("Wallet connection cancelled")}
+}
+$("#modal").onclick=e=>{if(e.target.id==="modal")closeModal()}
+build();
+</script>
+</body>
+</html>
